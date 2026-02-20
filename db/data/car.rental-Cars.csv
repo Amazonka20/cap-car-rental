@@ -1,0 +1,11 @@
+licensePlate;brand;model;year;dailyPrice;status;category
+ABC123;Toyota;Corolla;2022;45.00;Available;Sedan
+XYZ789;BMW;X5;2023;120.00;Available;SUV
+DEF456;Tesla;Model 3;2024;95.00;Available;Sedan
+GHI789;Toyota;RAV4;2023;75.00;Rented;SUV
+JKL012;BMW;320i;2021;80.00;Under Maintenance;Sedan
+MNO345;Honda;Civic;2022;50.00;Available;Sedan
+PQR678;Audi;Q7;2024;140.00;Available;SUV
+STU901;Ford;Focus;2020;40.00;Available;Hatchback
+VWX234;Mercedes;C-Class;2023;110.00;Available;Sedan
+YZA567;Volkswagen;Golf;2021;55.00;Available;Hatchback
