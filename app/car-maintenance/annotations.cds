@@ -38,13 +38,13 @@ annotate service.Cars with @(
             {
                 $Type      : 'UI.DataField',
                 Label      : '{i18n>Status}',
-                Value      : status.name,
+                Value      : status_code,
                 Criticality: status.criticality
             },
             {
                 $Type: 'UI.DataField',
                 Label: '{i18n>Category}',
-                Value: category.name
+                Value: category_code
             }
         ]
     },
@@ -58,8 +58,8 @@ annotate service.Cars with @(
         {
             $Type : 'UI.ReferenceFacet',
             Label : '{i18n>Maintenance}',
-            ID    : 'i18nMaintenance',
-            Target: 'maintenance/@UI.LineItem#i18nMaintenance',
+            ID    : 'Maintenance',
+            Target: 'maintenance/@UI.LineItem#Maintenance',
         },
     ],
     UI.LineItem                 : [
@@ -105,6 +105,10 @@ annotate service.Cars with @(
         $Type: 'UI.FieldGroupType',
         Data : [],
     },
+    UI.FieldGroup #Maintenance  : {
+        $Type: 'UI.FieldGroupType',
+        Data : [],
+    },
     UI.SelectionFields          : [
         status_code,
         category_code,
@@ -116,6 +120,11 @@ annotate service.Cars with @(
 annotate service.Cars with {
     status  @Common.ValueListWithFixedValues: true;
     status  @Common.Text: status.name  @Common.TextArrangement: #TextOnly
+};
+
+annotate service.Cars with {
+    category @Common.Text           : category.name;
+    category @Common.TextArrangement: #TextOnly;
 };
 
 
@@ -164,6 +173,7 @@ annotate service.Cars with {
     model        @Common.Label: '{i18n>Model}';
 };
 
+
 annotate service.Rentals with @(UI.LineItem #Rentals: [
     {
         $Type: 'UI.DataField',
@@ -202,35 +212,35 @@ annotate service.Rentals with @(UI.LineItem #Rentals: [
     },
 ]);
 
-annotate service.Maintenance with @(UI.LineItem #i18nMaintenance: [
+annotate service.Maintenance with @(UI.LineItem #Maintenance: [
     {
         $Type: 'UI.DataField',
-        Value: car.maintenance.car_licensePlate,
+        Value: car_licensePlate,
         Label: '{i18n>Carlicenseplate}',
     },
     {
         $Type: 'UI.DataField',
-        Value: car.maintenance.cost,
+        Value: cost,
         Label: '{i18n>Cost}',
     },
     {
         $Type: 'UI.DataField',
-        Value: car.maintenance.description,
+        Value: description,
         Label: '{i18n>Description}',
     },
     {
         $Type: 'UI.DataField',
-        Value: car.maintenance.endDate,
+        Value: startDate,
+        Label: '{i18n>Startdate}',
+    },
+    {
+        $Type: 'UI.DataField',
+        Value: endDate,
         Label: '{i18n>Enddate}',
     },
     {
         $Type: 'UI.DataField',
-        Value: car.maintenance.ID,
+        Value: ID,
         Label: '{i18n>ID}',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: car.maintenance.startDate,
-        Label: '{i18n>Startdate}',
     },
 ]);

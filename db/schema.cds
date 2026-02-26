@@ -15,15 +15,15 @@ entity CarCategories {
 
 entity Cars {
     key licensePlate : String;
-        brand        : String(50)                 @mandatory;
-        model        : String                     @mandatory;
-        year         : Integer                    @mandatory;
-        dailyPrice   : Decimal(10, 2)             @mandatory;
-        status       : Association to CarStatuses @mandatory;
-        category     : Association to CarCategories;
+        brand        : String(50)                   @mandatory;
+        model        : String                       @mandatory;
+        year         : Integer                      @mandatory;
+        dailyPrice   : Decimal(10, 2)               @mandatory;
+        status       : Association to CarStatuses   @mandatory;
+        category     : Association to CarCategories @mandatory;
         rentals      : Association to many Rentals
                            on rentals.car = $self;
-        maintenance  : Association to many Maintenance
+        maintenance  : Composition of many Maintenance
                            on maintenance.car = $self;
 }
 
@@ -52,7 +52,7 @@ entity Maintenance {
         startDate   : Date                @mandatory;
         endDate     : Date;
         description : String(500)         @mandatory;
-        cost        : Decimal(10, 2);
+        cost        : Decimal(10, 2)      @mandatory;
         car         : Association to Cars @mandatory;
 
 }
