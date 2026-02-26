@@ -1,13 +1,26 @@
+using {sap} from '@sap/cds/common';
+
 namespace car.rental;
+
+entity CarStatuses : sap.common.CodeList {
+    key code        : String(30);
+        criticality : Integer;
+}
+
+entity CarCategories {
+    key code : String(20);
+        name : String(50);
+}
+
 
 entity Cars {
     key licensePlate : String;
-        brand        : String(50)     @mandatory;
-        model        : String         @mandatory;
-        year         : Integer        @mandatory;
-        dailyPrice   : Decimal(10, 2) @mandatory;
-        status       : String default 'Available';
-        category     : String(20);
+        brand        : String(50)                 @mandatory;
+        model        : String                     @mandatory;
+        year         : Integer                    @mandatory;
+        dailyPrice   : Decimal(10, 2)             @mandatory;
+        status       : Association to CarStatuses @mandatory;
+        category     : Association to CarCategories;
         rentals      : Association to many Rentals
                            on rentals.car = $self;
         maintenance  : Association to many Maintenance

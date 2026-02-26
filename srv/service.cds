@@ -5,4 +5,6 @@ service CarRentalService {
     entity Customers as projection on rental.Customers;
     entity Rentals as projection on rental.Rentals;
     entity Maintenance as projection on rental.Maintenance;
+    entity CarStatuses as projection on rental.CarStatuses;
+    entity CarCategories as projection on rental.CarCategories;
 }

@@ -1,0 +1,4 @@
+code;name;criticality
+CAR_AVAILABLE;Available;3
+CAR_RENTED;Rented;2
+CAR_UNDER_MAINTENANCE;Under Maintenance;1
