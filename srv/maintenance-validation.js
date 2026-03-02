@@ -13,7 +13,6 @@ module.exports = (srv, entities) => {
 
   const validateMaintenance = async (req) => {
     const data = req.data || {};
-    const tx = cds.transaction(req);
 
     const startDate = data.startDate;
     const endDate = data.endDate;
@@ -23,14 +22,12 @@ module.exports = (srv, entities) => {
     let effectiveEndDate = endDate;
 
     if (effectiveStartDate == null || effectiveEndDate == null) {
-        const sourceEntity = req.target;
+      const sourceEntity = req.target;
 
-      const currentMaintenance = await tx.run(
-        SELECT.one
-          .from(sourceEntity)
-          .columns("ID", "startDate", "endDate", "car_licensePlate")
-          .where({ ID:  data.ID })
-      );
+      const currentMaintenance = await SELECT.one
+        .from(sourceEntity)
+        .columns("ID", "startDate", "endDate", "car_licensePlate")
+        .where({ ID: data.ID });
 
       if (currentMaintenance) {
         if (effectiveStartDate == null)
@@ -55,11 +52,10 @@ module.exports = (srv, entities) => {
     }
 
     // 1) Maintenance periods should not overlap with each other
-    const maintenanceRows = await tx.run(
-      SELECT.from(Maintenance)
-        .columns("ID", "startDate", "endDate")
-        .where({ car_licensePlate: carLicensePlate })
-    );
+    const maintenanceRows = await SELECT.from(Maintenance)
+      .columns("ID", "startDate", "endDate")
+      .where({ car_licensePlate: carLicensePlate });
+
     for (const row of maintenanceRows) {
       if (data.ID && row.ID === data.ID) continue;
       if (
@@ -80,12 +76,10 @@ module.exports = (srv, entities) => {
     }
 
     // 2) Car can not be under maintenance if it is rented (overlap check)
-    const rentalRows = await tx.run(
-      SELECT.from(Rentals)
-        .columns("ID", "rentalDate", "returnDate")
-        .where({ car_licensePlate: carLicensePlate })
-    );
-    
+    const rentalRows = await SELECT.from(Rentals)
+      .columns("ID", "rentalDate", "returnDate")
+      .where({ car_licensePlate: carLicensePlate });
+
     for (const rental of rentalRows) {
       if (
         overlaps(
