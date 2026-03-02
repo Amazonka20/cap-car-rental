@@ -125,6 +125,12 @@ annotate service.Cars with {
             ValueListProperty: 'name'
         }]
     };
+    status_code @Common.Text                    : status.name;
+    status_code @Common.TextArrangement         : #TextOnly;
+};
+
+annotate service.CarStatuses with {
+    code @Common.Text           : name;
 };
 
 annotate service.Cars with {

@@ -1,9 +1,10 @@
+const cds = require("@sap/cds");
 const registerMaintenanceValidation = require("./maintenance-validation");
 
 module.exports = (srv) => {
-  registerMaintenanceValidation(srv, srv.entities("CarRentalService"));
+  registerMaintenanceValidation(srv, cds.entities("CarRentalService"));
 
-  const { Cars } = srv.entities("CarRentalService");
+  const { Cars } = cds.entities("CarRentalService");
   const currentYear = new Date().getFullYear();
   const minYear = currentYear - 15;
 
