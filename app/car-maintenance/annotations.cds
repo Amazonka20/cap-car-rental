@@ -21,6 +21,8 @@ annotate service.Cars with @(
             }
         ]
     },
+    UI.HeaderInfo               : {TypeNamePlural: '{i18n>Cars}',
+    },
 
     UI.FieldGroup #PricingStatus: {
         $Type: 'UI.FieldGroupType',
@@ -36,10 +38,14 @@ annotate service.Cars with @(
                 Value: dailyPrice
             },
             {
-                $Type      : 'UI.DataField',
-                Label      : '{i18n>Status}',
-                Value      : status_code,
-                Criticality: status.criticality
+                $Type        : 'UI.DataField',
+                Label        : '{i18n>Status}',
+                Value        : status.name,
+                Criticality  : status.criticality,
+                ![@UI.Hidden]: {$edmJson: {$Eq: [
+                    {$Path: 'IsActiveEntity'},
+                    false
+                ]}}
             },
             {
                 $Type: 'UI.DataField',
@@ -101,14 +107,6 @@ annotate service.Cars with @(
             Target: '@UI.FieldGroup#PricingStatus'
         }
     ],
-    UI.FieldGroup #Rentals      : {
-        $Type: 'UI.FieldGroupType',
-        Data : [],
-    },
-    UI.FieldGroup #Maintenance  : {
-        $Type: 'UI.FieldGroupType',
-        Data : [],
-    },
     UI.SelectionFields          : [
         status_code,
         category_code,
@@ -118,15 +116,22 @@ annotate service.Cars with @(
 );
 
 annotate service.Cars with {
-    status  @Common.ValueListWithFixedValues: true;
-    status  @Common.Text: status.name  @Common.TextArrangement: #TextOnly
+    status_code @Common.ValueListWithFixedValues: true;
+    status_code @Common.ValueList               : {
+        $Type         : 'Common.ValueListType',
+        CollectionPath: 'CarStatuses',
+        Parameters    : [{
+            $Type            : 'Common.ValueListParameterDisplayOnly',
+            ValueListProperty: 'name'
+        }]
+    };
+    status_code @Common.Text                    : status.name;
+    status_code @Common.TextArrangement         : #TextOnly;
 };
 
-annotate service.Cars with {
-    category @Common.Text           : category.name;
-    category @Common.TextArrangement: #TextOnly;
+annotate service.CarStatuses with {
+    code @Common.Text           : name;
 };
-
 
 annotate service.Cars with {
     licensePlate @Common.ValueList: {
@@ -165,7 +170,7 @@ annotate service.Cars with {
 
 
 annotate service.Cars with {
-    status       @Common.Label: '{i18n>Status}';
+    status_code  @Common.Label: '{i18n>Status}';
     category     @Common.Label: '{i18n>Category}';
     year         @Common.Label: '{i18n>Year}';
     licensePlate @Common.Label: '{i18n>LicensePlate}';
@@ -189,11 +194,6 @@ annotate service.Rentals with @(UI.LineItem #Rentals: [
         $Type: 'UI.DataField',
         Value: car.rentals.customer_email,
         Label: '{i18n>Customeremail}',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: car.rentals.ID,
-        Label: '{i18n>ID}',
     },
     {
         $Type: 'UI.DataField',
@@ -237,10 +237,5 @@ annotate service.Maintenance with @(UI.LineItem #Maintenance: [
         $Type: 'UI.DataField',
         Value: endDate,
         Label: '{i18n>Enddate}',
-    },
-    {
-        $Type: 'UI.DataField',
-        Value: ID,
-        Label: '{i18n>ID}',
     },
 ]);

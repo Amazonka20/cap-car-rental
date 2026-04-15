@@ -35,3 +35,6 @@ build/
 
 # OS files
 Thumbs.db
+# CAP compile temporary artifacts
+.tmp-*.json
+.tmp-*.xml

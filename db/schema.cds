@@ -1,26 +1,30 @@
-using {sap} from '@sap/cds/common';
+using {cuid} from '@sap/cds/common';
 
 namespace car.rental;
 
-entity CarStatuses : sap.common.CodeList {
-    key code        : String(30);
-        criticality : Integer;
-}
-
-entity CarCategories {
+aspect MyCodeList : {
     key code : String(20);
         name : String(50);
 }
 
+entity CarStatuses : MyCodeList {
+    criticality : Integer;
+}
+
+entity CarCategories : MyCodeList {}
 
 entity Cars {
     key licensePlate : String;
-        brand        : String(50)                   @mandatory;
-        model        : String                       @mandatory;
-        year         : Integer                      @mandatory;
-        dailyPrice   : Decimal(10, 2)               @mandatory;
-        status       : Association to CarStatuses   @mandatory;
-        category     : Association to CarCategories @mandatory;
+        brand        : String(50)                    @mandatory;
+        model        : String                        @mandatory;
+        year         : Integer                       @mandatory;
+        dailyPrice   : Decimal(10, 2)                @assert.range        : [
+            (0),
+            _
+        ]
+                                                     @assert.range.message: 'Daily Rental Price must be greater than 0.'
+                                                     @mandatory;
+        category     : Association to CarCategories  @assert.target  @mandatory;
         rentals      : Association to many Rentals
                            on rentals.car = $self;
         maintenance  : Composition of many Maintenance
@@ -38,21 +42,17 @@ entity Customers {
                             on rentals.customer = $self;
 }
 
-entity Rentals {
-    key ID         : UUID;
-        rentalDate : Date                     @mandatory;
-        returnDate : Date                     @mandatory;
-        totalPrice : Decimal(10, 2)           @mandatory;
-        customer   : Association to Customers @mandatory;
-        car        : Association to Cars      @mandatory;
+entity Rentals : cuid {
+    rentalDate : Date                     @mandatory;
+    returnDate : Date                     @mandatory;
+    customer   : Association to Customers @mandatory;
+    car        : Association to Cars      @mandatory;
 }
 
-entity Maintenance {
-    key ID          : UUID;
-        startDate   : Date                @mandatory;
-        endDate     : Date;
-        description : String(500)         @mandatory;
-        cost        : Decimal(10, 2)      @mandatory;
-        car         : Association to Cars @mandatory;
-
+entity Maintenance : cuid {
+    startDate   : Date                @mandatory;
+    endDate     : Date;
+    description : String(500)         @mandatory;
+    cost        : Decimal(10, 2)      @mandatory;
+    car         : Association to Cars @mandatory;
 }
